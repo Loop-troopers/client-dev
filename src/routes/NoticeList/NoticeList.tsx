@@ -50,6 +50,19 @@ export default function NoticeList() {
       try {
         // 반환된 promise 객체들로부터 성공한 것만 상태에 추가
         const promiseResults = await getNotice();
+
+        const successfulResults: INotice[] = [];
+
+        promiseResults.forEach((promise) => {
+          if (
+            promise.status === "fulfilled" &&
+            Array.isArray(promise.value.data)
+          ) {
+            successfulResults.push(...promise.value.data);
+          }
+        });
+
+        setNotice(successfulResults);
       } catch (error) {
         console.error("Error fetching notices:", error);
       }
@@ -75,4 +88,14 @@ export default function NoticeList() {
 }
 
 // GET: 학과, 소중사 공지사항
-const getNotice = async () => {};
+const getNotice = async () => {
+  const swMajorNoticeURL = `/api/sw_major_notice`;
+  const sw7upNoticeURL = `/api/sw_7up_notice`;
+
+  const promiseResults = await Promise.allSettled([
+    axios.get(swMajorNoticeURL),
+    axios.get(sw7upNoticeURL),
+  ]);
+
+  return promiseResults;
+};

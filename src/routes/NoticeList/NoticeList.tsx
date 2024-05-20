@@ -1,49 +1,18 @@
-import axios, { AxiosResponse } from "axios";
-import { useCallback, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-
-const Wrapper = styled.div`
-  width: 100%;
-  padding: var(--top-navbar-height) 1rem 1rem;
-`;
-
-const NoticeItem = styled.div`
-  width: 100%;
-  height: 4rem;
-  /* border: 1px solid black; */
-  border-radius: 1rem;
-  margin: 0.5rem 0;
-  padding: 2rem;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  text-overflow: ellipsis;
-  box-shadow: 0px 2px 3px -1px rgba(0, 0, 0, 0.1),
-    0px 1px 0px 0px rgba(25, 28, 33, 0.02),
-    0px 0px 0px 1px rgba(25, 28, 33, 0.08);
-`;
-
-const PageCategory = styled.span`
-  width: 4rem;
-  display: flex;
-  flex-basis: 20%;
-`;
-const Title = styled.div`
-  display: flex;
-  flex-basis: 80%;
-`;
-
-interface INotice {
-  group: string;
-  notice_id: number;
-  title: string;
-  created_at?: string;
-}
+import axios from "axios";
+import { useEffect, useState } from "react";
+import BottomSheet from "../../components/BottomSheet/BottomSheet";
+import useBottomSheet from "../../hooks/useBottomSheet";
+import NoticeDetail from "./components/NoticeDetail";
+import { INotice, ISelectedNoticeInfo } from "./types/type";
+import * as S from "./styles/NoticeList.style";
 
 // 공지사항 목록
 export default function NoticeList() {
   const [notice, setNotice] = useState<INotice[]>([]);
+  const [selectedNoticeInfo, setSelectedNoticeInfo] =
+    useState<ISelectedNoticeInfo>();
+
+  const { onDragEnd, controls, setIsOpen } = useBottomSheet();
 
   useEffect(() => {
     const fetchNotice = async () => {
@@ -72,18 +41,27 @@ export default function NoticeList() {
   }, []);
 
   return (
-    <Wrapper>
+    <S.Wrapper>
       {notice
         ? notice.map((noticeItem) => (
-            <Link key={noticeItem.notice_id} to={`${noticeItem.notice_id}`}>
-              <NoticeItem>
-                <PageCategory>{noticeItem.group}</PageCategory>
-                <Title>{noticeItem.title}</Title>
-              </NoticeItem>
-            </Link>
+            <S.NoticeItem
+              key={noticeItem.noticeId}
+              onClick={() => {
+                setIsOpen(true);
+                setSelectedNoticeInfo([noticeItem.group, noticeItem.noticeId]);
+              }}
+            >
+              <S.PageCategory>{noticeItem.group}</S.PageCategory>
+              <S.Title>{noticeItem.title}</S.Title>
+            </S.NoticeItem>
           ))
         : null}
-    </Wrapper>
+      <BottomSheet onDragEnd={onDragEnd} controls={controls}>
+        {selectedNoticeInfo ? (
+          <NoticeDetail selectedNoticeInfo={selectedNoticeInfo} />
+        ) : null}
+      </BottomSheet>
+    </S.Wrapper>
   );
 }
 

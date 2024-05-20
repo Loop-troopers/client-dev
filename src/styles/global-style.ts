@@ -2,14 +2,18 @@ import { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
 
 // Global Constants
-const NAVBAR_HEIGTH = "5rem";
+const TOP_NAVBAR_HEIGTH = "5rem";
+const BOTTOM_NAVBAR_HEIGTH = "5rem";
+const BOTTOM_SHEET_HEIGHT = window.innerHeight;
 
 export const GlobalStyle = createGlobalStyle`
     ${reset}
 
       /* Global Styles */
   :root {
-    --top-navbar-height: ${NAVBAR_HEIGTH};
+    --top-navbar-height: ${TOP_NAVBAR_HEIGTH};
+    --btm-navbar-height: ${BOTTOM_NAVBAR_HEIGTH};
+    --btm-sheet-height: ${BOTTOM_SHEET_HEIGHT};
   }
 
   * {
@@ -18,7 +22,7 @@ export const GlobalStyle = createGlobalStyle`
 
   body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    background-color: #ffffff;
     margin: 0;
     padding: 0;
   }

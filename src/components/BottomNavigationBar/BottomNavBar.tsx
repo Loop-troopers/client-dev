@@ -11,7 +11,7 @@ export interface ITabContent {
 
 const Wrapper = styled.nav`
   width: 100%;
-  height: 5rem;
+  height: var(--btm-navbar-height);
   background-color: blue;
   position: fixed;
   left: 0;
@@ -22,6 +22,7 @@ const Wrapper = styled.nav`
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  z-index: 20;
 `;
 
 export default function BottomNavBar() {

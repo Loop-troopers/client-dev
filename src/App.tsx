@@ -1,7 +1,6 @@
 import { Outlet } from "react-router-dom";
 import TopNavBar from "./components/TopNavigationBar/TopNavBar";
 import BottomNavBar from "./components/BottomNavigationBar/BottomNavBar";
-import axios from "axios";
 
 function App() {
   // axios.defaults.withCredentials = true;

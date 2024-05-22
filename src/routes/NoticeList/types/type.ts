@@ -14,6 +14,6 @@ export interface INoticeDetailData {
   category: string;
   title: string;
   body: string;
-  imageUrls: string;
-  tables: string;
+  imageUrls: string[];
+  tables: string[];
 }

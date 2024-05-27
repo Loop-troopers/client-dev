@@ -12,7 +12,7 @@ export interface ITabContent {
 const Wrapper = styled.nav`
   width: 100%;
   height: var(--btm-navbar-height);
-  background-color: blue;
+  background-color: white;
   position: fixed;
   left: 0;
   right: 0;
@@ -23,6 +23,8 @@ const Wrapper = styled.nav`
   flex-direction: row;
   justify-content: space-around;
   z-index: 20;
+  border-radius: 1rem 1rem 0rem 0rem;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 `;
 
 export default function BottomNavBar() {
@@ -40,7 +42,7 @@ export default function BottomNavBar() {
           icon={section.icon}
           to={section.path}
           size="1.6rem"
-          color="white"
+          color="gray"
           text={section.text}
         />
       ))}

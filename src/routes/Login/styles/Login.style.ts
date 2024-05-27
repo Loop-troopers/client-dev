@@ -29,7 +29,7 @@ export const Title = styled.h3`
 `;
 
 export const FormWrapper = styled.div`
-  width: 75%;
+  width: 80%;
 `;
 
 export const Form = styled.form`

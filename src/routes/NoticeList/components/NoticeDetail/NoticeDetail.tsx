@@ -1,30 +1,22 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { INoticeDetailData, ISelectedNoticeInfo } from "../types/type";
-import styled from "styled-components";
+import { INoticeDetail, ISelectedNoticeInfo } from "../../types/type";
+import * as S from "./styles/NoticeDetail.style";
+import { IoBookmarkOutline } from "react-icons/io5";
 
+// 공지사항 상세 (바텀시트)
 interface NoticeDetailProps {
   selectedNoticeInfo: ISelectedNoticeInfo;
 }
-
-const Button = styled.div`
-  width: 100px;
-  height: 50px;
-  background-color: red;
-`;
-
-// 공지사항 상세 (바텀시트)
 export default function NoticeDetail({
   selectedNoticeInfo,
 }: NoticeDetailProps) {
   // 공지사항 상세 상태
-  const [noticeDetail, setNoticeDetail] = useState<INoticeDetailData | null>(
-    null
-  );
-
+  const [noticeDetail, setNoticeDetail] = useState<INoticeDetail>(null);
+  const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
   // 전달 props 바뀔 때마다 해당 props를 조합하여 공지사항 상세 api 요청
   useEffect(() => {
-    async function fetchNoticeDetail() {
+    const fetchNoticeDetail = async () => {
       try {
         const noticeDetailData = await getNoticeDetail(selectedNoticeInfo);
 
@@ -32,26 +24,39 @@ export default function NoticeDetail({
       } catch (error) {
         console.error("Error fetching notice detail:", error);
       }
-    }
+    };
     if (selectedNoticeInfo?.length === 2) {
       fetchNoticeDetail();
     }
   }, [selectedNoticeInfo]);
 
+  const handleBookmarkClick = () => {
+    setIsBookmarked(!isBookmarked);
+    postNoticeBookmark(noticeId);
+  };
+
   if (!noticeDetail) return null;
 
-  const { category, title, body, imageUrls, tables } = noticeDetail;
+  const { noticeId, category, title, body, imageUrls, tables } = noticeDetail;
+
   console.log(imageUrls);
   console.log(tables);
 
   return (
     <div>
+      <S.BookmarkBtn
+        isBookmarked={isBookmarked}
+        onClick={() => handleBookmarkClick()}
+      >
+        <IoBookmarkOutline />
+      </S.BookmarkBtn>
       <div>{category}</div>
       <div>{title}</div>
       <div>{body}</div>
       <h1>첨부파일</h1>
-      {imageUrls.map((imageUrlItem) => (
-        <Button>첨부 파일</Button>
+      {imageUrls?.map((imageUrlItem) => (
+        <img src={imageUrlItem} alt="" />
+        // <Button>첨부 파일</Button>
       ))}
       <div>{tables}</div>
     </div>
@@ -65,7 +70,16 @@ const getNoticeDetail = async (
   const [noticeGroup, noticeId] = selectedNoticeInfo;
 
   const noticeDetailURL = `/api/${noticeGroup}/${noticeId}`;
-  const response = await axios.get(noticeDetailURL);
+  const response = await axios.get<INoticeDetail>(noticeDetailURL);
 
   return response.data;
+};
+
+const postNoticeBookmark = async (noticeId: number | string) => {
+  const response = await axios.post(`/api/bookmark`, {
+    noticeId: noticeId,
+    userId: 1,
+  });
+
+  console.log(response);
 };

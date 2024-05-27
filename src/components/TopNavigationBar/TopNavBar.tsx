@@ -3,7 +3,8 @@ import styled from "styled-components";
 const Wrapper = styled.nav`
   width: 100%;
   height: var(--top-navbar-height);
-  background-color: blue;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   position: fixed;
   left: 0;
   right: 0;

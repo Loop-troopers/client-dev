@@ -1,17 +1,18 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import BottomSheet from "../../components/BottomSheet/BottomSheet";
 import useBottomSheet from "../../hooks/useBottomSheet";
-import NoticeDetail from "./components/NoticeDetail";
+import NoticeDetail from "./components/NoticeDetail/NoticeDetail";
 import { INotice, ISelectedNoticeInfo } from "./types/type";
 import * as S from "./styles/NoticeList.style";
+import NoticeLogo from "./components/NoticeLogo/NoticeLogo";
 
 // 공지사항 목록
 export default function NoticeList() {
   const [notice, setNotice] = useState<INotice[]>([]);
   const [selectedNoticeInfo, setSelectedNoticeInfo] =
     useState<ISelectedNoticeInfo>();
-
+  const [selectedGroup, setSelectedGroup] = useState<string>("전체");
   const { onDragEnd, controls, setIsOpen } = useBottomSheet();
 
   useEffect(() => {
@@ -40,22 +41,41 @@ export default function NoticeList() {
     fetchNotice();
   }, []);
 
+  // 필터링된 공지사항 반환
+  const filteredNotice = useMemo(() => {
+    if (selectedGroup === "전체") {
+      return notice;
+    }
+
+    return notice.filter((noticeItem) => noticeItem.group === selectedGroup);
+  }, [notice, selectedGroup]);
+
   return (
     <S.Wrapper>
-      {notice
-        ? notice.map((noticeItem) => (
-            <S.NoticeItem
-              key={noticeItem.noticeId}
-              onClick={() => {
-                setIsOpen(true);
-                setSelectedNoticeInfo([noticeItem.group, noticeItem.noticeId]);
-              }}
-            >
-              <S.PageCategory>{noticeItem.group}</S.PageCategory>
-              <S.Title>{noticeItem.title}</S.Title>
-            </S.NoticeItem>
-          ))
-        : null}
+      {/* 필터링 버튼 */}
+      <S.FilterButtonWrapper>
+        {["전체", "sw_major_notice", "sw_7up_notice"].map((group) => (
+          <S.FilterButton
+            key={group}
+            onClick={() => setSelectedGroup(group)}
+            $isSelected={selectedGroup === group}
+          >
+            {group}
+          </S.FilterButton>
+        ))}
+      </S.FilterButtonWrapper>
+      {filteredNotice.map((noticeItem) => (
+        <S.NoticeItem
+          key={noticeItem.noticeId}
+          onClick={() => {
+            setIsOpen(true);
+            setSelectedNoticeInfo([noticeItem.group, noticeItem.noticeId]);
+          }}
+        >
+          <NoticeLogo group={noticeItem.group} />
+          <S.Title>{noticeItem.title}</S.Title>
+        </S.NoticeItem>
+      ))}
       <BottomSheet onDragEnd={onDragEnd} controls={controls}>
         {selectedNoticeInfo ? (
           <NoticeDetail selectedNoticeInfo={selectedNoticeInfo} />

@@ -14,6 +14,7 @@ export const GlobalStyle = createGlobalStyle`
     --top-navbar-height: ${TOP_NAVBAR_HEIGTH};
     --btm-navbar-height: ${BOTTOM_NAVBAR_HEIGTH};
     --btm-sheet-height: ${BOTTOM_SHEET_HEIGHT};
+    --primary-color: rgba(70, 130, 180, 1);
   }
 
   * {

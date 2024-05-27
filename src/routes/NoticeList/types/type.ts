@@ -10,10 +10,12 @@ export interface INotice {
 export type ISelectedNoticeInfo = [string, number | string];
 
 // 공지사항 상세
-export interface INoticeDetailData {
-  category: string;
+export interface INoticeDetail {
+  noticeId: number | string;
+  category?: string;
   title: string;
   body: string;
-  imageUrls: string[];
-  tables: string[];
+  imageUrls?: string[];
+  tables?: string[];
+  createdAt?: string;
 }

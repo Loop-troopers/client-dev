@@ -8,7 +8,7 @@ import * as S from "./styles/Login.style";
 
 // 로그인 페이지
 export default function Login() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -17,14 +17,14 @@ export default function Login() {
     setIsSignupOpen(openStatus);
   };
 
-  const emailInputRef = useRef();
+  const usernameInputRef = useRef();
   const passwordInputRef = useRef();
 
   // const userDispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleEmailInputChange = () => {
-    setEmail(emailInputRef.current.value);
+  const handleUsernameInputChange = () => {
+    setUsername(usernameInputRef.current.value);
   };
   const handlePasswordInputChange = () => {
     setPassword(passwordInputRef.current.value);
@@ -32,20 +32,21 @@ export default function Login() {
 
   const handleLoginSubmit = (event) => {
     event.preventDefault();
-    if (!email) {
-      return alert("이메일을 입력하세요");
+
+    if (!username) {
+      return alert("닉네임을 입력하세요");
     }
     if (!password) {
       return alert("비밀번호를 입력하세요");
     }
 
     const body = {
-      email,
+      username,
       password,
     };
 
     // POST: 사용자 로그인 정보 입력
-    const loginPostURL = `api/login/`;
+    const loginPostURL = `api/login`;
     axios
       ?.post(loginPostURL, body, {
         headers: {
@@ -53,9 +54,11 @@ export default function Login() {
         },
       })
       ?.then((res) => {
+        console.log(res);
+
         if (res.status === 201) {
           // userDispatch(loginUser(res.data));
-          navigate("");
+          navigate("/notices");
         }
       })
       ?.catch((e) => {
@@ -75,11 +78,11 @@ export default function Login() {
           <S.FormWrapper>
             <S.Form onSubmit={handleLoginSubmit}>
               <S.Input
-                onChange={handleEmailInputChange}
+                onChange={handleUsernameInputChange}
                 type="text"
-                value={email}
-                placeholder="Email"
-                ref={emailInputRef}
+                value={username}
+                placeholder="Username"
+                ref={usernameInputRef}
               />
               <S.Input
                 onChange={handlePasswordInputChange}

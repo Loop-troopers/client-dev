@@ -18,7 +18,7 @@ const IconWrapper = styled.div<Omit<IIconProps, "icon">>`
 `;
 
 const IconText = styled.p`
-  font-size: 1rem;
+  font-size: 0.9rem;
 `;
 
 export default function NavigationIcon({

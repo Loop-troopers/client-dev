@@ -27,7 +27,7 @@ const Wrapper = styled.nav`
 
 export default function BottomNavBar() {
   const content = [
-    { icon: FaListUl, path: "", text: "최신글" },
+    { icon: FaListUl, path: "/notices", text: "최신글" },
     { icon: IoBookmarks, path: "/bookmark", text: "북마크" },
     { icon: FaRegUser, path: "/profile", text: "내정보" },
   ];

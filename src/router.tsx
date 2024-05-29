@@ -6,6 +6,7 @@ import BookmarkList from "./routes/BookmarkList/BookmarkList";
 import NoticeList from "./routes/NoticeList/NoticeList";
 import NotFound from "./errors/NotFound";
 import Login from "./routes/Login/Login";
+import NoticeDetailPage from "./routes/NoticeList/page";
 
 export const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ export const router = createBrowserRouter([
       {
         path: "notices",
         element: <NoticeList />,
+      },
+      {
+        path: "notices/:noticeId",
+        element: <NoticeDetailPage />,
       },
     ],
   },

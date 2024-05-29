@@ -17,10 +17,7 @@ export default function NoticeList() {
   useEffect(() => {
     const fetchNotice = async () => {
       try {
-        // 반환된 promise 객체들로부터 성공한 것만 상태에 추가
         const response = await getNotice();
-
-        console.log(response);
 
         setNotice(response.data);
       } catch (error) {
@@ -58,6 +55,7 @@ export default function NoticeList() {
       </S.FilterButtonWrapper>
       {filteredNotice.map((noticeItem) => (
         <NoticeCard
+          key={noticeItem.noticeId}
           noticeId={noticeItem.noticeId}
           noticeGroup={noticeItem.noticeGroup}
           title={noticeItem.title}

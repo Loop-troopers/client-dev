@@ -27,6 +27,7 @@ export const GlobalStyle = createGlobalStyle`
   
   
   body {
+    color: #111111;
     font-family: Arial, sans-serif;
     background-color: #ffffff;
     margin: 0;

@@ -1,85 +1,98 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { INoticeDetail, ISelectedNoticeInfo } from "../../types/type";
+import { INoticeDetail } from "../../types/type";
 import * as S from "./styles/NoticeDetail.style";
-import { IoBookmarkOutline } from "react-icons/io5";
 
 // 공지사항 상세 (바텀시트)
 interface NoticeDetailProps {
-  selectedNoticeInfo: ISelectedNoticeInfo;
+  selectedNoticeId: string;
 }
-export default function NoticeDetail({
-  selectedNoticeInfo,
-}: NoticeDetailProps) {
+export default function NoticeDetail({ selectedNoticeId }: NoticeDetailProps) {
   // 공지사항 상세 상태
-  const [noticeDetail, setNoticeDetail] = useState<INoticeDetail>(null);
+  const [noticeDetail, setNoticeDetail] = useState<INoticeDetail>();
   const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
-  // 전달 props 바뀔 때마다 해당 props를 조합하여 공지사항 상세 api 요청
+
   useEffect(() => {
     const fetchNoticeDetail = async () => {
       try {
-        const noticeDetailData = await getNoticeDetail(selectedNoticeInfo);
+        const { data: noticeDetailData } = await getNoticeDetail(
+          selectedNoticeId
+        );
 
         setNoticeDetail(noticeDetailData);
       } catch (error) {
         console.error("Error fetching notice detail:", error);
       }
     };
-    if (selectedNoticeInfo?.length === 2) {
+    if (selectedNoticeId) {
       fetchNoticeDetail();
     }
-  }, [selectedNoticeInfo]);
+  }, [selectedNoticeId]);
 
   const handleBookmarkClick = () => {
-    setIsBookmarked(!isBookmarked);
     postNoticeBookmark(noticeId);
+    setIsBookmarked(!isBookmarked);
   };
 
   if (!noticeDetail) return null;
 
   const { noticeId, category, title, body, imageUrls, tables } = noticeDetail;
-
-  console.log(imageUrls);
-  console.log(tables);
+  console.log(body);
 
   return (
-    <div>
-      <S.BookmarkBtn
-        isBookmarked={isBookmarked}
-        onClick={() => handleBookmarkClick()}
-      >
-        <IoBookmarkOutline />
-      </S.BookmarkBtn>
-      <div>{category}</div>
-      <div>{title}</div>
-      <div>{body}</div>
-      <h1>첨부파일</h1>
-      {imageUrls?.map((imageUrlItem) => (
-        <img src={imageUrlItem} alt="" />
-        // <Button>첨부 파일</Button>
-      ))}
-      <div>{tables}</div>
-    </div>
+    <S.NoticeDetailWrapper>
+      <S.HeaderWrapper>
+        <S.Category>{category}</S.Category>
+        <S.Title>{title}</S.Title>
+        <S.BookmarkBtn
+          $isBookmarked={isBookmarked}
+          onClick={() => handleBookmarkClick()}
+        ></S.BookmarkBtn>
+      </S.HeaderWrapper>
+      <S.ContentWrapper>
+        {imageUrls && imageUrls.length > 0 && (
+          <S.ImageWrapper>
+            {imageUrls.map((imageUrlItem) => (
+              <S.Image key={imageUrlItem} src={imageUrlItem} alt="" />
+            ))}
+          </S.ImageWrapper>
+        )}
+        <S.Table dangerouslySetInnerHTML={{ __html: tables }} />
+        <S.Body dangerouslySetInnerHTML={{ __html: body }} />
+        {/* <S.Body>{body}</S.Body> */}
+      </S.ContentWrapper>
+    </S.NoticeDetailWrapper>
   );
 }
 
 // GET: 학과, 소중사 공지사항 상세
-const getNoticeDetail = async (
-  selectedNoticeInfo: [string, string | number]
-) => {
-  const [noticeGroup, noticeId] = selectedNoticeInfo;
+const getNoticeDetail = async (selectedNoticeId: string) => {
+  const noticeDetailURL = `/api/notice/${selectedNoticeId}`;
 
-  const noticeDetailURL = `/api/${noticeGroup}/${noticeId}`;
-  const response = await axios.get<INoticeDetail>(noticeDetailURL);
-
-  return response.data;
+  return await axios.get<INoticeDetail>(noticeDetailURL);
 };
 
 const postNoticeBookmark = async (noticeId: number | string) => {
-  const response = await axios.post(`/api/bookmark`, {
-    noticeId: noticeId,
-    userId: 1,
-  });
-
-  console.log(response);
+  const bookmarkPostURL = `/api/bookmark`;
+  await axios
+    .post(
+      bookmarkPostURL,
+      {
+        noticeId,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+    ?.then((res) => {
+      if (res.status === 201) {
+        return true;
+      }
+    })
+    ?.catch((e) => {
+      alert("북마크 저장 실패");
+      return false;
+    });
 };

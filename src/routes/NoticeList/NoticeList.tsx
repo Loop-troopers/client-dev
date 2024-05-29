@@ -3,15 +3,14 @@ import { useEffect, useMemo, useState } from "react";
 import BottomSheet from "../../components/BottomSheet/BottomSheet";
 import useBottomSheet from "../../hooks/useBottomSheet";
 import NoticeDetail from "./components/NoticeDetail/NoticeDetail";
-import { INotice, ISelectedNoticeInfo } from "./types/type";
+import { INotice } from "./types/type";
 import * as S from "./styles/NoticeList.style";
-import NoticeLogo from "./components/NoticeLogo/NoticeLogo";
+import NoticeCard from "./components/NoticeDetail/components/NoticeCard/NoticeCard";
 
 // 공지사항 목록
 export default function NoticeList() {
   const [notice, setNotice] = useState<INotice[]>([]);
-  const [selectedNoticeInfo, setSelectedNoticeInfo] =
-    useState<ISelectedNoticeInfo>();
+  const [selectedNoticeId, setSelectedNoticeId] = useState<string>("");
   const [selectedGroup, setSelectedGroup] = useState<string>("전체");
   const { onDragEnd, controls, setIsOpen } = useBottomSheet();
 
@@ -19,20 +18,11 @@ export default function NoticeList() {
     const fetchNotice = async () => {
       try {
         // 반환된 promise 객체들로부터 성공한 것만 상태에 추가
-        const promiseResults = await getNotice();
+        const response = await getNotice();
 
-        const successfulResults: INotice[] = [];
+        console.log(response);
 
-        promiseResults.forEach((promise) => {
-          if (
-            promise.status === "fulfilled" &&
-            Array.isArray(promise.value.data)
-          ) {
-            successfulResults.push(...promise.value.data);
-          }
-        });
-
-        setNotice(successfulResults);
+        setNotice(response.data);
       } catch (error) {
         console.error("Error fetching notices:", error);
       }
@@ -47,14 +37,16 @@ export default function NoticeList() {
       return notice;
     }
 
-    return notice.filter((noticeItem) => noticeItem.group === selectedGroup);
+    return notice.filter(
+      (noticeItem) => noticeItem.noticeGroup === selectedGroup
+    );
   }, [notice, selectedGroup]);
 
   return (
     <S.Wrapper>
       {/* 필터링 버튼 */}
       <S.FilterButtonWrapper>
-        {["전체", "sw_major_notice", "sw_7up_notice"].map((group) => (
+        {["전체", "sw_major", "sw_7up"].map((group) => (
           <S.FilterButton
             key={group}
             onClick={() => setSelectedGroup(group)}
@@ -65,20 +57,17 @@ export default function NoticeList() {
         ))}
       </S.FilterButtonWrapper>
       {filteredNotice.map((noticeItem) => (
-        <S.NoticeItem
-          key={noticeItem.noticeId}
-          onClick={() => {
-            setIsOpen(true);
-            setSelectedNoticeInfo([noticeItem.group, noticeItem.noticeId]);
-          }}
-        >
-          <NoticeLogo group={noticeItem.group} />
-          <S.Title>{noticeItem.title}</S.Title>
-        </S.NoticeItem>
+        <NoticeCard
+          noticeId={noticeItem.noticeId}
+          noticeGroup={noticeItem.noticeGroup}
+          title={noticeItem.title}
+          setIsOpen={setIsOpen}
+          setSelectedNoticeId={setSelectedNoticeId}
+        />
       ))}
       <BottomSheet onDragEnd={onDragEnd} controls={controls}>
-        {selectedNoticeInfo ? (
-          <NoticeDetail selectedNoticeInfo={selectedNoticeInfo} />
+        {selectedNoticeId ? (
+          <NoticeDetail selectedNoticeId={selectedNoticeId} />
         ) : null}
       </BottomSheet>
     </S.Wrapper>
@@ -87,13 +76,7 @@ export default function NoticeList() {
 
 // GET: 학과, 소중사 공지사항
 const getNotice = async () => {
-  const swMajorNoticeURL = `/api/sw_major_notice`;
-  const sw7upNoticeURL = `/api/sw_7up_notice`;
+  const noticeURL = `/api/notice`;
 
-  const promiseResults = await Promise.allSettled([
-    axios.get(swMajorNoticeURL),
-    axios.get(sw7upNoticeURL),
-  ]);
-
-  return promiseResults;
+  return axios.get(noticeURL);
 };

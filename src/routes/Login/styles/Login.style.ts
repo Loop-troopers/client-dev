@@ -45,7 +45,7 @@ export const Input = styled.input`
   border: none;
   border-radius: 0.5rem;
   &:focus {
-    outline-color: rgba(70, 130, 180, 0.9);
+    outline-color: var(--primary-color);
   }
 `;
 
@@ -54,16 +54,16 @@ export const LoginButton = styled.button`
   height: 3rem;
   margin-top: 1.25rem;
   margin-bottom: 2rem;
-  background-color: rgba(70, 130, 180, 0.9);
+  background-color: var(--primary-color);
   border-radius: 0.375rem;
   color: white;
   font-size: 1.125rem;
   letter-spacing: 0.05em;
   &:focus {
-    outline-color: rgba(70, 130, 180, 1);
+    outline-color: var(--primary-color);
   }
   &:disabled {
-    background-color: rgba(70, 130, 180, 0.5);
+    background-color: rgba(77, 134, 156, 0.8);
   }
 `;
 

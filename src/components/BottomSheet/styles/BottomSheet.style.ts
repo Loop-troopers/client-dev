@@ -23,6 +23,7 @@ export const HeaderWrapper = styled(motion.div)`
   position: relative;
   padding-top: 16px;
   padding-bottom: 4px;
+  background-color: var(--secondary-color);
 `;
 
 export const HandleBar = styled(motion.div)`
@@ -35,7 +36,6 @@ export const HandleBar = styled(motion.div)`
 
 export const ContentWrapper = styled.div`
   height: 80vh;
-  padding: 2rem;
   padding-bottom: calc(var(--btm-navbar-height) + 20vh);
   overflow: auto;
 `;

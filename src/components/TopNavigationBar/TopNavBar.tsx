@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import BackSpaceBtn from "../BackSpaceBtn/BackSpaceBtn";
 
 const Wrapper = styled.nav`
   width: 100%;
@@ -10,14 +11,19 @@ const Wrapper = styled.nav`
   right: 0;
   top: 0;
   margin: 0;
-  padding: 0.5rem 0;
+  padding: 0.5rem 2rem;
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: left;
+  align-items: center;
   border-radius: 0 0 1rem 1rem;
   z-index: 10;
 `;
 
 export default function TopNavBar() {
-  return <Wrapper></Wrapper>;
+  return (
+    <Wrapper>
+      <BackSpaceBtn />
+    </Wrapper>
+  );
 }

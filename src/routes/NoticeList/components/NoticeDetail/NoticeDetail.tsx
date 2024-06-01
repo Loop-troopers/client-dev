@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { INoticeDetail } from "../../types/type";
 import * as S from "./styles/NoticeDetail.style";
+import BookmarkBtn from "../../../../components/BookmarkBtn/BookmarkBtn";
 
 // 공지사항 상세 (바텀시트)
 interface NoticeDetailProps {
@@ -29,25 +30,20 @@ export default function NoticeDetail({ selectedNoticeId }: NoticeDetailProps) {
     }
   }, [selectedNoticeId]);
 
-  const handleBookmarkClick = () => {
-    postNoticeBookmark(noticeId);
-    setIsBookmarked(!isBookmarked);
-  };
-
   if (!noticeDetail) return null;
 
   const { noticeId, category, title, body, imageUrls, tables } = noticeDetail;
-  console.log(body);
 
   return (
     <S.NoticeDetailWrapper>
       <S.HeaderWrapper>
         <S.Category>{category}</S.Category>
         <S.Title>{title}</S.Title>
-        <S.BookmarkBtn
-          $isBookmarked={isBookmarked}
-          onClick={() => handleBookmarkClick()}
-        ></S.BookmarkBtn>
+        <BookmarkBtn
+          noticeId={noticeId}
+          isBookmarked={isBookmarked}
+          setIsBookmarked={setIsBookmarked}
+        />
       </S.HeaderWrapper>
       <S.ContentWrapper>
         {imageUrls && imageUrls.length > 0 && (
@@ -59,7 +55,6 @@ export default function NoticeDetail({ selectedNoticeId }: NoticeDetailProps) {
         )}
         <S.Table dangerouslySetInnerHTML={{ __html: tables }} />
         <S.Body dangerouslySetInnerHTML={{ __html: body }} />
-        {/* <S.Body>{body}</S.Body> */}
       </S.ContentWrapper>
     </S.NoticeDetailWrapper>
   );
@@ -70,29 +65,4 @@ const getNoticeDetail = async (selectedNoticeId: string) => {
   const noticeDetailURL = `/api/notice/${selectedNoticeId}`;
 
   return await axios.get<INoticeDetail>(noticeDetailURL);
-};
-
-const postNoticeBookmark = async (noticeId: number | string) => {
-  const bookmarkPostURL = `/api/bookmark`;
-  await axios
-    .post(
-      bookmarkPostURL,
-      {
-        noticeId,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
-    ?.then((res) => {
-      if (res.status === 201) {
-        return true;
-      }
-    })
-    ?.catch((e) => {
-      alert("북마크 저장 실패");
-      return false;
-    });
 };

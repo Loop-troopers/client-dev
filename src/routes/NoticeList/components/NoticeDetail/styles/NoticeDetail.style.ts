@@ -1,4 +1,3 @@
-import { FaBookmark } from "react-icons/fa";
 import styled from "styled-components";
 
 export const NoticeDetailWrapper = styled.div`
@@ -28,15 +27,6 @@ export const Category = styled.div`
 export const Title = styled.h1`
   width: 75%;
   line-height: 140%;
-`;
-
-export const BookmarkBtnWrapper = styled.div`
-  width: 10%;
-`;
-
-export const BookmarkBtn = styled(FaBookmark)<{ $isBookmarked }>`
-  font-size: 1.2rem;
-  color: ${({ $isBookmarked }) => ($isBookmarked ? "yellow" : "gray")};
 `;
 
 export const ContentWrapper = styled.div`

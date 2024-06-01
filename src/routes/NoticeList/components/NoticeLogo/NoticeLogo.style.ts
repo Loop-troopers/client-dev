@@ -7,8 +7,7 @@ export const NoticeItemLogoWrapper = styled.div`
   flex-basis: 20%;
 `;
 
-export const NoticeItemLogo = styled.img<{ $group: string }>`
-  width: 60%;
-  height: 60%;
+export const NoticeItemLogo = styled.img`
+  width: 40%;
   margin: auto;
 `;

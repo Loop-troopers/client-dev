@@ -5,7 +5,7 @@ export const Wrapper = styled.div`
   width: 100%;
   height: 100vh;
   padding: var(--top-navbar-height) 1rem var(--btm-navbar-height);
-  background-color: var(--main-bg-color);
+  background-color: white;
 `;
 
 export const Header = styled.div`

@@ -13,6 +13,10 @@ export const NoticeItem = styled.div`
     0px 1px 0px 0px rgba(25, 28, 33, 0.02),
     0px 0px 0px 1px rgba(25, 28, 33, 0.08);
   z-index: 20;
+
+  &:hover {
+    border: 2px solid var(--primary-color); /* 원하는 색상으로 변경 */
+  }
 `;
 
 export const Title = styled.div`

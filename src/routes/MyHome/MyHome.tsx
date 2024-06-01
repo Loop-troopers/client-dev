@@ -1,17 +1,10 @@
-import styled from "styled-components";
 import * as S from "./styles/MyHome.style";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const BgWrapper = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
-  z-index: 10;
-`;
+const bgImgSrc = "/images/main_home_bg.png";
+
+const menus = ["회원정보 수정", "로그아웃", "회원 탈퇴"];
 
 export default function MyHome() {
   const navigate = useNavigate();
@@ -29,14 +22,19 @@ export default function MyHome() {
           navigate("/");
         }
       })
-      ?.catch((e) => {
-        alert("로그인 실패");
-      });
+      ?.catch((e) => {});
   };
 
   return (
-    <S.Wrapper>
-      <button onClick={() => logout()}>로그아웃</button>
-    </S.Wrapper>
+    <S.Container>
+      <S.HomeImageWrapper>
+        <S.HomeBgImage src={bgImgSrc} />
+      </S.HomeImageWrapper>
+      <S.HomeMenuWrapper>
+        {menus.map((menuItem) => (
+          <S.HomeMenu onClick={() => logout()}>{menuItem}</S.HomeMenu>
+        ))}
+      </S.HomeMenuWrapper>
+    </S.Container>
   );
 }

@@ -14,10 +14,10 @@ export const GlobalStyle = createGlobalStyle`
     --top-navbar-height: ${TOP_NAVBAR_HEIGTH};
     --btm-navbar-height: ${BOTTOM_NAVBAR_HEIGTH};
     --btm-sheet-height: ${BOTTOM_SHEET_HEIGHT};
-    --primary-color: rgba(77, 134, 156, 0.8);
-    --secondary-color: rgba(122, 178, 178, 1);
-    --tertiary-color: rgba(205, 232, 229, 1);
-    --main-bg-color: rgba(238, 247, 255, 1);
+    --primary-color: rgba(22, 49, 114, 1);
+    --secondary-color: rgba(30, 86, 160, 1);
+    --tertiary-color: rgba(214, 228, 240, 1);
+    --main-bg-color: rgba(246, 246, 246, 1);
     
   }
 

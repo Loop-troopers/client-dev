@@ -16,4 +16,5 @@ export interface INoticeDetail {
   imageUrls?: string[];
   tables?: string[];
   createdAt?: string;
+  isUserBookmarked: boolean;
 }

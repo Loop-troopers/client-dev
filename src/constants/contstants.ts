@@ -12,3 +12,10 @@ export const PAGE_NAME = Object.freeze({
   bookmark: "북마크",
   profile: "내 정보",
 });
+
+// 홈 화면 메뉴명
+export const HOME_MENU = Object.freeze({
+  editProfile: "회원 정보 수정",
+  logout: "로그아웃",
+  withdrawal: "회원 탈퇴",
+});

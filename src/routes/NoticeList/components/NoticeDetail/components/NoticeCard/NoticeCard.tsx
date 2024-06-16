@@ -6,8 +6,8 @@ interface INoticeCardProps {
   noticeId: string;
   noticeGroup: string;
   title: string;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setSelectedNoticeId: React.Dispatch<React.SetStateAction<string>>;
+  setIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedNoticeId?: React.Dispatch<React.SetStateAction<string>>;
 }
 export default function NoticeCard({
   noticeId,
@@ -20,8 +20,8 @@ export default function NoticeCard({
     <S.NoticeItem
       key={noticeId}
       onClick={() => {
-        setIsOpen(true);
-        setSelectedNoticeId(noticeId);
+        setIsOpen?.(true);
+        setSelectedNoticeId?.(noticeId);
       }}
     >
       <NoticeLogo group={noticeGroup} />

@@ -1,6 +1,4 @@
-import { useState, useRef } from "react";
-// import { useDispatch } from "react-redux";
-// import { loginUser } from "../reducer/userReducer";
+import { useState, useRef, FormEvent } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import SignupModal from "../../components/SignupModal/SignupModal";
@@ -17,20 +15,23 @@ export default function Login() {
     setIsSignupOpen(openStatus);
   };
 
-  const usernameInputRef = useRef();
-  const passwordInputRef = useRef();
+  const usernameInputRef = useRef<HTMLInputElement | null>(null);
+  const passwordInputRef = useRef<HTMLInputElement | null>(null);
 
-  // const userDispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleUsernameInputChange = () => {
-    setUsername(usernameInputRef.current.value);
+    if (usernameInputRef.current) {
+      setUsername(usernameInputRef.current.value);
+    }
   };
   const handlePasswordInputChange = () => {
-    setPassword(passwordInputRef.current.value);
+    if (passwordInputRef.current) {
+      setPassword(passwordInputRef.current.value);
+    }
   };
 
-  const handleLoginSubmit = (event) => {
+  const handleLoginSubmit = (event: FormEvent) => {
     event.preventDefault();
 
     if (!username) {
@@ -45,7 +46,7 @@ export default function Login() {
       password,
     };
 
-    // POST: 사용자 로그인 정보 입력
+    // POST: 로그인
     const loginPostURL = `api/login`;
     axios
       ?.post(loginPostURL, body, {
@@ -57,11 +58,10 @@ export default function Login() {
         console.log(res);
 
         if (res.status === 201) {
-          // userDispatch(loginUser(res.data));
           navigate("/notices");
         }
       })
-      ?.catch((e) => {
+      ?.catch(() => {
         alert("로그인 실패");
         setIsLoading(false);
       });
@@ -73,7 +73,7 @@ export default function Login() {
       <S.Container onClick={(e) => e.stopPropagation()}>
         <S.InnerContainer>
           <S.Header>
-            <S.Title>Loop Troopers</S.Title>
+            <S.Title>MoaBoa</S.Title>
           </S.Header>
           <S.FormWrapper>
             <S.Form onSubmit={handleLoginSubmit}>

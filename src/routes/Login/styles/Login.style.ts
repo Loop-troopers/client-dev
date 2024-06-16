@@ -25,7 +25,8 @@ export const Header = styled.header`
 
 export const Title = styled.h3`
   font-size: 1.5rem;
-  letter-spacing: 0.05em;
+  font-weight: 400;
+  letter-spacing: 0.5rem;
 `;
 
 export const FormWrapper = styled.div`

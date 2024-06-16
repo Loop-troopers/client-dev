@@ -18,9 +18,25 @@ export const HeaderWrapper = styled.div`
   border-bottom: 1px solid black;
 `;
 
-export const Category = styled.div`
+export const MetaWrapper = styled.div`
   width: 20%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
+export const Category = styled.div`
+  height: 80%;
   font-weight: bold;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+export const CreatedAt = styled.div`
+  height: 20%;
+  font-size: 0.8rem;
   text-align: center;
 `;
 

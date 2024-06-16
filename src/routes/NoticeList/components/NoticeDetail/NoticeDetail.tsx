@@ -11,7 +11,6 @@ interface NoticeDetailProps {
 export default function NoticeDetail({ selectedNoticeId }: NoticeDetailProps) {
   // 공지사항 상세 상태
   const [noticeDetail, setNoticeDetail] = useState<INoticeDetail>();
-  const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchNoticeDetail = async () => {
@@ -19,10 +18,11 @@ export default function NoticeDetail({ selectedNoticeId }: NoticeDetailProps) {
         const { data: noticeDetailData } = await getNoticeDetail(
           selectedNoticeId
         );
+        // console.log("noticeDetailData: ", noticeDetailData);
 
         setNoticeDetail(noticeDetailData);
-      } catch (error) {
-        console.error("Error fetching notice detail:", error);
+      } catch {
+        // @@@에러처리필요
       }
     };
     if (selectedNoticeId) {
@@ -32,23 +32,31 @@ export default function NoticeDetail({ selectedNoticeId }: NoticeDetailProps) {
 
   if (!noticeDetail) return null;
 
-  const { noticeId, category, title, body, imageUrls, tables } = noticeDetail;
+  const {
+    noticeId,
+    category,
+    title,
+    body,
+    imageUrls,
+    tables,
+    createdAt,
+    isUserBookmarked,
+  } = noticeDetail;
 
   return (
     <S.NoticeDetailWrapper>
       <S.HeaderWrapper>
-        <S.Category>{category}</S.Category>
+        <S.MetaWrapper>
+          <S.Category>{category}</S.Category>
+          <S.CreatedAt>{createdAt}</S.CreatedAt>
+        </S.MetaWrapper>
         <S.Title>{title}</S.Title>
-        <BookmarkBtn
-          noticeId={noticeId}
-          isBookmarked={isBookmarked}
-          setIsBookmarked={setIsBookmarked}
-        />
+        <BookmarkBtn noticeId={noticeId} isUserBookmarked={isUserBookmarked} />
       </S.HeaderWrapper>
       <S.ContentWrapper>
         {imageUrls && imageUrls.length > 0 && (
           <S.ImageWrapper>
-            {imageUrls.map((imageUrlItem) => (
+            {imageUrls?.map((imageUrlItem) => (
               <S.Image key={imageUrlItem} src={imageUrlItem} alt="" />
             ))}
           </S.ImageWrapper>
